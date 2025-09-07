@@ -23,7 +23,6 @@ function showRandomQuote() {
   const randomIndex = Math.floor(Math.random() * quotes.length);
   const randomQuote = quotes[randomIndex];
 
-  // Use innerHTML to render formatted quote (block + category)
   display.innerHTML = `
     <blockquote style="font-style:italic; margin:0 0.5rem 0.5rem 0; padding-left:1rem; border-left:4px solid #ccc;">
       ${escapeHtml(randomQuote.text)}
@@ -53,19 +52,46 @@ function addQuote() {
 
   quotes.push({ text: quoteText, category: quoteCategory });
 
-  // Show confirmation using innerHTML
   const display = document.getElementById("quoteDisplay");
   if (display) {
     display.innerHTML = `<p style="color:green; margin:0;">New quote added: "${escapeHtml(quoteText)}" — [${escapeHtml(quoteCategory)}]</p>`;
   }
 
-  // Clear inputs
   textEl.value = "";
   catEl.value = "";
 }
 
 /**
- * Simple helper to escape HTML to avoid injection when using innerHTML
+ * createAddQuoteForm
+ * Dynamically generates the form (inputs + button) to add quotes.
+ */
+function createAddQuoteForm() {
+  const container = document.createElement("div");
+
+  const textInput = document.createElement("input");
+  textInput.id = "newQuoteText";
+  textInput.type = "text";
+  textInput.placeholder = "Enter a new quote";
+
+  const categoryInput = document.createElement("input");
+  categoryInput.id = "newQuoteCategory";
+  categoryInput.type = "text";
+  categoryInput.placeholder = "Enter quote category";
+
+  const addButton = document.createElement("button");
+  addButton.id = "addQuoteBtn";
+  addButton.textContent = "Add Quote";
+  addButton.addEventListener("click", addQuote);
+
+  container.appendChild(textInput);
+  container.appendChild(categoryInput);
+  container.appendChild(addButton);
+
+  document.body.appendChild(container);
+}
+
+/**
+ * Escape HTML to avoid injection when using innerHTML
  */
 function escapeHtml(str) {
   return String(str)
@@ -79,10 +105,10 @@ function escapeHtml(str) {
 // Wire up event listeners on DOMContentLoaded
 document.addEventListener("DOMContentLoaded", () => {
   const newQuoteBtn = document.getElementById("newQuote");
-  const addQuoteBtn = document.getElementById("addQuoteBtn");
-
   if (newQuoteBtn) newQuoteBtn.addEventListener("click", showRandomQuote);
-  if (addQuoteBtn) addQuoteBtn.addEventListener("click", addQuote);
+
+  // dynamically create the Add Quote form
+  createAddQuoteForm();
 
   // show a random quote on load
   showRandomQuote();
