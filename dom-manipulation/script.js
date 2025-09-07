@@ -133,7 +133,8 @@ async function syncQuotes() {
     saveQuotes();
     populateCategories();
 
-    status.textContent = "Sync complete. Local quotes sent, server quotes merged.";
+    // ✅ Notify user
+    status.textContent = "Quotes synced with server!";
   } catch (error) {
     console.error("Sync failed:", error);
     status.textContent = "Sync failed. Please try again.";
