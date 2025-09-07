@@ -99,21 +99,25 @@ function importFromJsonFile(event) {
   fileReader.readAsText(event.target.files[0]);
 }
 
-// ===== Sync with Server (Simulated) =====
+// ===== Fetch Quotes From Server (Required Function) =====
+async function fetchQuotesFromServer() {
+  const response = await fetch("https://jsonplaceholder.typicode.com/posts?_limit=5");
+  const serverData = await response.json();
+
+  // Map server data into quote format
+  return serverData.map(item => ({
+    text: item.title,
+    category: "Server"
+  }));
+}
+
+// ===== Sync with Server (Uses fetchQuotesFromServer) =====
 async function syncWithServer() {
   const status = document.getElementById("syncStatus");
   status.textContent = "Syncing with server...";
 
   try {
-    // Fetch "server quotes" (simulate server data with JSONPlaceholder)
-    const response = await fetch("https://jsonplaceholder.typicode.com/posts?_limit=5");
-    const serverData = await response.json();
-
-    // Map serverData to quotes format
-    const serverQuotes = serverData.map(item => ({
-      text: item.title,
-      category: "Server"
-    }));
+    const serverQuotes = await fetchQuotesFromServer();
 
     // Conflict resolution: server wins
     quotes = [...quotes, ...serverQuotes];
