@@ -99,32 +99,41 @@ function importFromJsonFile(event) {
   fileReader.readAsText(event.target.files[0]);
 }
 
-// ===== Fetch Quotes From Server (Required Function) =====
+// ===== Fetch Quotes From Server =====
 async function fetchQuotesFromServer() {
   const response = await fetch("https://jsonplaceholder.typicode.com/posts?_limit=5");
   const serverData = await response.json();
 
-  // Map server data into quote format
   return serverData.map(item => ({
     text: item.title,
     category: "Server"
   }));
 }
 
-// ===== Sync with Server (Uses fetchQuotesFromServer) =====
+// ===== Sync with Server (GET + POST) =====
 async function syncWithServer() {
   const status = document.getElementById("syncStatus");
   status.textContent = "Syncing with server...";
 
   try {
+    // Step 1: Fetch from server
     const serverQuotes = await fetchQuotesFromServer();
 
-    // Conflict resolution: server wins
+    // Step 2: Post local quotes to server (mock)
+    await fetch("https://jsonplaceholder.typicode.com/posts", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(quotes)
+    });
+
+    // Step 3: Merge server data (server wins)
     quotes = [...quotes, ...serverQuotes];
     saveQuotes();
     populateCategories();
 
-    status.textContent = "Sync complete. Server data merged (server wins conflicts).";
+    status.textContent = "Sync complete. Local quotes sent, server quotes merged.";
   } catch (error) {
     console.error("Sync failed:", error);
     status.textContent = "Sync failed. Please try again.";
