@@ -42,7 +42,7 @@ function addQuote() {
 
   quotes.push({ text, category });
   saveQuotes();
-  populateCategories(); // update dropdown if new category
+  populateCategories();
   textInput.value = "";
   categoryInput.value = "";
   alert("Quote added!");
@@ -110,8 +110,8 @@ async function fetchQuotesFromServer() {
   }));
 }
 
-// ===== Sync with Server (GET + POST) =====
-async function syncWithServer() {
+// ===== Sync Quotes (GET + POST) =====
+async function syncQuotes() {
   const status = document.getElementById("syncStatus");
   status.textContent = "Syncing with server...";
 
