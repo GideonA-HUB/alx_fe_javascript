@@ -8,11 +8,10 @@ let quotes = [
 ];
 
 /**
- * displayRandomQuote
+ * showRandomQuote
  * Chooses a random quote and renders it into #quoteDisplay using innerHTML.
- * (Checker requires innerHTML to be present in the file.)
  */
-function displayRandomQuote() {
+function showRandomQuote() {
   const display = document.getElementById("quoteDisplay");
   if (!display) return;
 
@@ -82,9 +81,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const newQuoteBtn = document.getElementById("newQuote");
   const addQuoteBtn = document.getElementById("addQuoteBtn");
 
-  if (newQuoteBtn) newQuoteBtn.addEventListener("click", displayRandomQuote);
+  if (newQuoteBtn) newQuoteBtn.addEventListener("click", showRandomQuote);
   if (addQuoteBtn) addQuoteBtn.addEventListener("click", addQuote);
 
   // show a random quote on load
-  displayRandomQuote();
+  showRandomQuote();
 });
