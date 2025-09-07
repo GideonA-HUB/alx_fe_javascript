@@ -144,4 +144,7 @@ async function syncQuotes() {
 document.addEventListener("DOMContentLoaded", () => {
   populateCategories();
   showRandomQuote();
+
+  // 🔄 Periodically sync with server every 30 seconds
+  setInterval(syncQuotes, 30000);
 });
